@@ -1,0 +1,76 @@
+[project]
+name = "odoo-sh-cli"
+version = "0.1.0"
+description = "RPA CLI to manage Odoo.sh projects by driving the web UI via GitHub login."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "odoo-sh-cli maintainers" }]
+keywords = ["odoo", "odoo.sh", "cli", "rpa", "automation", "playwright"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development :: Build Tools",
+]
+dependencies = [
+    "typer>=0.12",
+    "rich>=13.7",
+    "rpaframework>=28.0",
+    "robotframework-browser>=18.0",
+    "pydantic-settings>=2.2",
+    "keyring>=25.0",
+    "cryptography>=42.0",
+    "pyotp>=2.9",
+]
+
+[project.scripts]
+odoo-sh = "odoo_sh_cli.main:run"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+    "robotframework-tidy>=4.11",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/odoo_sh_cli"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Typer uses function calls (typer.Option/Argument) in argument defaults by design.
+"src/odoo_sh_cli/main.py" = ["B008"]
+"src/odoo_sh_cli/commands/*" = ["B008"]
+# Page Objects embed JS extraction blobs as string literals that can't be wrapped.
+"src/odoo_sh_cli/automation/pages/*" = ["E501"]
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["odoo_sh_cli"]
+mypy_path = "src"
+strict = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["RPA.*", "Browser.*", "keyring.*", "pyotp.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

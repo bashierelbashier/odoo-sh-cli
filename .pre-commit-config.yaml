@@ -1,0 +1,39 @@
+# Pre-commit hooks for odoo-sh-cli.
+# Install once with:  pre-commit install   (setup.sh does this for you)
+# Run on all files:   pre-commit run --all-files
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      # Run mypy and pytest in the project's own environment (uv) so they see
+      # the same config, package layout, and dependencies as CI.
+      - id: mypy
+        name: mypy
+        entry: uv run mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: pytest
+        name: pytest (unit)
+        entry: uv run pytest -q
+        language: system
+        pass_filenames: false
+        stages: [pre-push]

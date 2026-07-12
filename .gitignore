@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenv / uv
+.venv/
+# uv.lock IS committed for reproducible installs (do not ignore it).
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets & session state (NEVER commit)
+.env
+*.env
+session.enc
+config.toml
+
+# RPA failure artifacts
+screenshots/
+traces/
+output/
+*.zip
+playwright-log.txt
+*-log.txt
+
+# Local plaintext credentials — never commit
+odooshkonto.txt
+
+# robotframework-browser default output dir (may contain plaintext state/screenshots)
+browser/
